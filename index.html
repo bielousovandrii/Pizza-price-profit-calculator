@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор валюты в пиццы</title>
+</head>
+<body>
+    <style>
+        body{
+            background-color: rgb(245, 174, 109);
+        }
+    </style>
+    <div class="pizzatitle">
+        <h1 style="font-size: 124px; color:yellow;">PIZZA CALCULATOR</h1>
+        <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script> 
+
+
+    <lottie-player src="https://lottie.host/7cd293c9-06be-44c7-a60b-41c832a0b94b/jQ4gVhTsRl.json" background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></lottie-player>
+    </div>
+    <h1>ВЫБЕРИТЕ ВАЛЮТУ:</h1>
+    <select id="currencySelect">
+        <option value="USDT">USDT</option>
+        <option value="UAH">UAH</option>
+        <option value="RUB">RUB</option>
+    </select>  
+    <input type="number" id="amountInput" onchange="calculatePizza()">
+    
+    <h1>СУММА В ПИЦЦАХ</h1>
+    <h1><span id="pizzaSum">1</span>🍕</h1>
+    <h1>ЭТО ХВАТИТ НА :? НА СКОЛЬКО ХВАТИТ МММ ?</h1>
+    <h1><span id="pizzaSumday">POHUY</span>📆</h1>
+
+    <script>
+        function calculatePizza() {
+            // Получаем выбранную валюту и значение от пользователя
+            const currencySelect = document.getElementById("currencySelect");
+            const selectedCurrency = currencySelect.value;
+            const amountInput = document.getElementById("amountInput");
+            const amount = parseFloat(amountInput.value);
+            
+            // Определяем курс валюты к гривне
+            let exchangeRate;
+            switch (selectedCurrency) {
+                case "USDT":
+                    exchangeRate = 1 * 38; // 1 USDT = 38 грн
+                    break;
+                case "UAH":
+                    exchangeRate = 1; // 1 UAH = 1 грн
+                    break;
+                case "RUB":
+                    exchangeRate = 2; // Пример: 1 RUB = 2 грн
+                    break;
+                default:
+                    exchangeRate = 1; // По умолчанию, если выбрана неизвестная валюта
+            }
+
+            // Вычисляем эквивалент в пиццах
+            const pizzaEquivalent = amount / 121 * exchangeRate;
+            const pizzadayEquivalent = pizzaEquivalent / 2; // Рассчет для "ЭТО ХВАТИТ НА :? НА СКОЛЬКО ХВАТИТ МММ ?"
+
+            // Обновляем значение на странице
+            const pizzaSum = document.getElementById("pizzaSum");
+            const pizzaSumday = document.getElementById("pizzaSumday");
+            pizzaSum.textContent = pizzaEquivalent.toFixed(2); // Округляем до двух знаков после запятой
+            pizzaSumday.textContent = pizzadayEquivalent.toFixed(2);
+        }
+
+        var myHeaders = new Headers();
+myHeaders.append("Cookie", "OCSESSID=bbf7fd77600203157f3917a4d6; currency=UAH; language=uk-ua");
+
+var formdata = new FormData();
+formdata.append("product_id", "6");
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: formdata,
+  redirect: 'follow'
+};
+
+fetch("https://fanatikpizza.com.ua/index.php?route=checkout/cart/add&product_id=6&quantity=1", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+    </script>
+</body>
+</html>
